@@ -50,9 +50,15 @@ jobs:
 #    needs: bun                                                                   # <--- (1)
 #    steps:
 #      - uses: actions/checkout@v3
+#      - PATH="${{ needs.bun.outputs.BUN_BIN }}:$PATH" run: bun --help            # <--- (2)
+#  job2:
+#    runs-on: ubuntu-latest
+#    needs: bun                                                                   # <--- (1)
+#    steps:
+#      - uses: actions/checkout@v3
 #      - run: echo "${{ needs.bun.outputs.BUN_BIN }}" >> "$GITHUB_PATH"           # <--- (2)
 #      - run: bun --help
-#  job2:
+#  job3:
 #    runs-on: ubuntu-latest
 #    needs: bun                                                                   # <--- (1)
 #    steps:
