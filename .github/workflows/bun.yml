@@ -1,0 +1,67 @@
+name: bun
+on:
+  # Allows you to reuse local workflow from other repository GitHub Actions
+  workflow_call:
+    # Map the workflow outputs to job outputs
+    outputs:
+      BUN_HOME:
+        description: "bun home directory"
+        value: ${{ jobs.bun.outputs.BUN_HOME }}
+      BUN_BIN:
+        description: "bun bin directory"
+        value: ${{ jobs.bun.outputs.BUN_BIN }}
+jobs:
+  bun:
+    name: bun
+    runs-on: ubuntu-latest
+    # declare bun job outputs
+    outputs:
+      BUN_HOME: ${{ steps.home.outputs.BUN_HOME }}
+      BUN_BIN: ${{ steps.bin.outputs.BUN_BIN }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - uses: actions/cache@v3
+        id: ci
+        with:
+          path: |
+            ~/.bun
+            !~/.m2
+          key: ${{ runner.os }}-${{ hashFiles('**/README.md', '**/workflows/*.yml', '**/package.json', '**/package-lock.json') }}
+      - run: |
+          PATH="$HOME/.bun/bin:$PATH" command -v bun >/dev/null 2>&1 || {
+            echo >&2 "Bun is required but not installed. Installing..." ;
+            curl https://bun.sh/install | bash ;
+          }
+      # set bun job outputs
+      - id: home
+        run: echo "BUN_HOME=$HOME/.bun" >> $GITHUB_OUTPUT
+      - id: bin
+        run: echo "BUN_BIN=$HOME/.bun/bin" >> $GITHUB_OUTPUT
+#Usage:
+#name: ...
+#on: [...]
+#jobs:
+#  bun:
+#    uses: ./.github/workflows/bun.yml
+#  job1:
+#    runs-on: ubuntu-latest
+#    needs: bun                                                                   # <--- (1)
+#    steps:
+#      - uses: actions/checkout@v3
+#      - PATH="${{ needs.bun.outputs.BUN_BIN }}:$PATH" run: bun --help            # <--- (2)
+#  job2:
+#    runs-on: ubuntu-latest
+#    needs: bun                                                                   # <--- (1)
+#    steps:
+#      - uses: actions/checkout@v3
+#      - run: echo "${{ needs.bun.outputs.BUN_BIN }}" >> "$GITHUB_PATH"           # <--- (2)
+#      - run: bun --help
+#  job3:
+#    runs-on: ubuntu-latest
+#    needs: bun                                                                   # <--- (1)
+#    steps:
+#      - uses: actions/checkout@v3
+#      - run: echo "PATH=${{ needs.bun.outputs.BUN_BIN }}:$PATH" >> "$GITHUB_ENV" # <--- (2)
+#      - run: bun --help

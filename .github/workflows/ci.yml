@@ -1,8 +1,10 @@
 name: CI
 on: [push, workflow_dispatch] # Allows you to run this workflow manually from the Actions tab
 jobs:
-  tests:
-    name: run-ts-file
+  bun:
+    uses: ./.github/workflows/bun.yml
+  bash-variable:
+    needs: bun
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,7 +16,40 @@ jobs:
           path: |
             ~/.bun
             !~/.m2
-          key: ${{ runner.os }}-${{ hashFiles('**/ci.yml', '**/package.json', '**/package-lock.json') }}
-      - run: curl https://bun.sh/install | bash
+          key: ${{ runner.os }}-${{ hashFiles('**/README.md', '**/workflows/*.yml', '**/package.json', '**/package-lock.json') }}
       - run: PATH="$HOME/.bun/bin:$PATH" bun --help
       - run: PATH="$HOME/.bun/bin:$PATH" bun app.ts
+  github-env:
+    needs: bun
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - uses: actions/cache@v3
+        id: ci
+        with:
+          path: |
+            ~/.bun
+            !~/.m2
+          key: ${{ runner.os }}-${{ hashFiles('**/README.md', '**/workflows/*.yml', '**/package.json', '**/package-lock.json') }}
+      - run: echo "PATH=${{ needs.bun.outputs.BUN_BIN }}:$PATH" >> "$GITHUB_ENV"
+      - run: bun --help
+      - run: bun app.ts
+  github-path:
+    needs: bun
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - uses: actions/cache@v3
+        id: ci
+        with:
+          path: |
+            ~/.bun
+            !~/.m2
+          key: ${{ runner.os }}-${{ hashFiles('**/README.md', '**/workflows/*.yml', '**/package.json', '**/package-lock.json') }}
+      - run: echo "${{ needs.bun.outputs.BUN_BIN }}" >> "$GITHUB_PATH"
+      - run: bun --help
+      - run: bun app.ts
