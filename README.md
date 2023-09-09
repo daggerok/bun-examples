@@ -9,5 +9,6 @@ bun ./app.ts
 ```
 
 ## RTFM
+* https://bun.sh/blog/bun-v1.0
 * https://bun.sh/
 * https://github.com/Jarred-Sumner/bun
