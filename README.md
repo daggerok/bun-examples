@@ -5,10 +5,11 @@ Blazing fast JS
 curl https://bun.sh/install | bash
 exec /bin/zsh
 bun --help
-bun ./app.ts
+bun hello-world/app.ts
 ```
 
 ## RTFM
-* https://bun.sh/blog/bun-v1.0
 * https://bun.sh/
 * https://github.com/Jarred-Sumner/bun
+* https://bun.sh/blog/bun-v1.0
+* https://bun.sh/blog/bun-v1.0#bun-file
