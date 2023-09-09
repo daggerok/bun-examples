@@ -1,23 +1,20 @@
 name: CI
-on: [push]
+on: [push, workflow_dispatch] # Allows you to run this workflow manually from the Actions tab
 jobs:
   tests:
-    name: tests
+    name: run-ts-file
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 1
+      - uses: actions/cache@v3
+        id: ci
+        with:
+          path: |
+            ~/.bun
+            !~/.m2
+          key: ${{ runner.os }}-${{ hashFiles('**/ci.yml', '**/package.json', '**/package-lock.json') }}
       - run: curl https://bun.sh/install | bash
       - run: PATH="$HOME/.bun/bin:$PATH" bun --help
-      - run: PATH="$HOME/.bun/bin:$PATH" bun ./app.ts
-      #- id: run_bun
-      #  run: |
-      #    export BUN_INSTALL="$HOME/.bun"
-      #    export PATH="$BUN_INSTALL/bin:$PATH"
-      #    bun --help
-      #    bun ./app.ts
-      #    echo "::set-output name=run_bun_output_1::$(bun ./app.ts)"
-      #    echo "::set-output name=run_bun_output_2::$(echo ololo)"
-      #  shell: bash
-      #- run: echo "${{ steps.run_bun.outputs.run_bun_output_1 }} ${{ steps.run_bun.outputs.run_bun_output_2 }}"
+      - run: PATH="$HOME/.bun/bin:$PATH" bun app.ts
