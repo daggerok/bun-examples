@@ -33,10 +33,10 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/workflows/*.yml', '**/package.json', '**/package-lock.json') }}
       - run: |
           PATH="$HOME/.bun/bin:$PATH" command -v bun >/dev/null 2>&1 || {
-            echo >&2 "Bun is required but not installed. Installing..." ;
-            curl -fsSL https://bun.sh/install | bash                    ;
-            export BUN_VERSION=`${HOME}/.bun/bin/bun --version`         ;
-            echo "Installed ${BUN_VERSION} version of bun."             ;
+            echo >&2 "Bun is required but not installed."       ;
+            curl -fsSL https://bun.sh/install | bash            ;
+            export BUN_VERSION=`${HOME}/.bun/bin/bun --version` ;
+            echo "Installed ${BUN_VERSION} version of bun."     ;
           }
       # set bun job outputs
       - id: home
