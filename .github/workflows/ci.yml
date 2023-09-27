@@ -1,6 +1,25 @@
 name: CI
 on: [push, workflow_dispatch] # Allows you to run this workflow manually from the Actions tab
 jobs:
+  hello-bun:
+    needs: bun
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - uses: actions/cache@v3
+        id: ci
+        with:
+          path: |
+            !~/.m2
+            ~/.bun
+            ~/.npm
+            ~/.node
+          key: ${{ runner.os }}-${{ hashFiles('**/workflows/*.yml', '**/package.json', '**/package-lock.json') }}
+      - run: echo "${{ needs.bun.outputs.BUN_BIN }}" >> "$GITHUB_PATH"
+      - run: bun install --cwd `pwd`/hello-bun
+      - run: bun run `pwd`/hello-bun/index.ts
   test-like-a-jest:
     needs: bun
     runs-on: ubuntu-latest
