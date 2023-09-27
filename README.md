@@ -2,10 +2,16 @@
 Blazing fast JS
 
 ```bash
-curl https://bun.sh/install | bash
+curl -fsSL https://bun.sh/install | bash
 exec /bin/zsh
 bun --help
 bun hello-world/app.ts
+```
+
+## hello-bun
+
+```bash
+mkdir -p hello-bun && cd $_ ; bun init -y
 ```
 
 ## RTFM

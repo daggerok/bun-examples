@@ -34,7 +34,9 @@ jobs:
       - run: |
           PATH="$HOME/.bun/bin:$PATH" command -v bun >/dev/null 2>&1 || {
             echo >&2 "Bun is required but not installed. Installing..." ;
-            curl https://bun.sh/install | bash ;
+            curl -fsSL https://bun.sh/install | bash                    ;
+            export BUN_VERSION=`${HOME}/.bun/bin/bun --version`         ;
+            echo "Installed ${BUN_VERSION} version of bun."             ;
           }
       # set bun job outputs
       - id: home
