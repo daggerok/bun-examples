@@ -19,3 +19,4 @@ mkdir -p hello-bun && cd $_ ; bun init -y
 * https://github.com/Jarred-Sumner/bun
 * https://bun.sh/blog/bun-v1.0
 * https://bun.sh/blog/bun-v1.0#bun-file
+* https://youtube.com/watch?v=U4JVw8K19uY

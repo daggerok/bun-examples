@@ -10,7 +10,7 @@ bun.lockb
 # Logs
 
 logs
-_.log
+*.log
 npm-debug.log_
 yarn-debug.log*
 yarn-error.log*
