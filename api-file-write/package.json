@@ -1,5 +1,5 @@
 {
-  "name": "hello-bun-server",
+  "name": "api-file-write",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
